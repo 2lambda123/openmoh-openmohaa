@@ -420,7 +420,7 @@ void G_AddGEntity(gentity_t *edict, qboolean showentnums)
     }
 
     if (g_entinfo->integer
-        && (g_pPlayer && (edict->r.lastNetTime >= level.inttime - 200 || ent->IsSubclassOfPlayer()))) {
+            && (g_pPlayer && (edict->r.lastNetTime >= level.inttime - 200 || ent->IsSubclassOfPlayer()))) {
         float fDist = (g_pPlayer->centroid - g_pPlayer->EyePosition()).length();
 
         if (fDist != 0.0f) {
@@ -944,7 +944,7 @@ void G_SoundCallback(int entNum, soundChannel_t channelNumber, const char *name)
 
     if (!entity) {
         ScriptError("ERROR:  wait on playsound only works on entities that still exist when the sound is done playing."
-        );
+                   );
     }
 
     entity->CancelEventsOfType(EV_SoundDone);
@@ -1879,7 +1879,7 @@ void G_ExitLevel(void)
             }
             free(s);
         }
-    out:
+out:
         // level.nextmap should be set now, but if it isn't use the same map
         if (level.nextmap.length() == 0) {
             // Stay on the same map since no nextmap was set
