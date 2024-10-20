@@ -63,12 +63,12 @@ gentity_t free_edicts;
 int sv_numtraces   = 0;
 int sv_numpmtraces = 0;
 
-int             g_protocol = 0;
-target_game_e   g_target_game = target_game_e::TG_INVALID;
-gentity_t      *g_entities;
-qboolean        g_iInThinks     = 0;
-qboolean        g_bBeforeThinks = qfalse;
-static float    g_fMsecPerClock = 0;
+int           g_protocol    = 0;
+target_game_e g_target_game = target_game_e::TG_INVALID;
+gentity_t    *g_entities;
+qboolean      g_iInThinks     = 0;
+qboolean      g_bBeforeThinks = qfalse;
+static float  g_fMsecPerClock = 0;
 
 usercmd_t  *current_ucmd;
 usereyes_t *current_eyeinfo;
@@ -255,7 +255,7 @@ void G_InitGame(int levelTime, int randomSeed)
     G_Printf("gamename: %s\n", GAMEVERSION);
     G_Printf("gamedate: %s\n", __DATE__);
 
-    g_protocol = gi.Cvar_Get("com_protocol", "", 0)->integer;
+    g_protocol    = gi.Cvar_Get("com_protocol", "", 0)->integer;
     g_target_game = (target_game_e)gi.Cvar_Get("com_target_game", "0", 0)->integer;
 
     srand(randomSeed);
@@ -420,7 +420,7 @@ void G_AddGEntity(gentity_t *edict, qboolean showentnums)
     }
 
     if (g_entinfo->integer
-            && (g_pPlayer && (edict->r.lastNetTime >= level.inttime - 200 || ent->IsSubclassOfPlayer()))) {
+        && (g_pPlayer && (edict->r.lastNetTime >= level.inttime - 200 || ent->IsSubclassOfPlayer()))) {
         float fDist = (g_pPlayer->centroid - g_pPlayer->EyePosition()).length();
 
         if (fDist != 0.0f) {
@@ -507,7 +507,7 @@ void G_RunFrame(int levelTime, int frameTime)
             assert(edict->inuse);
             assert(edict->entity);
 
-            Actor *actor = static_cast<Actor*>(edict->entity);
+            Actor *actor = static_cast<Actor *>(edict->entity);
             if (actor->IsSubclassOfActor()) {
                 actor->m_bUpdateAnimDoneFlags = false;
                 if (actor->m_bAnimating) {
@@ -750,13 +750,13 @@ for entities in a radius of 1000 units.
 */
 void G_ClientDrawTags(void)
 {
-    Entity* player;
-    Entity* ent;
-    const char* tagName;
-    Vector origin;
+    Entity       *player;
+    Entity       *ent;
+    const char   *tagName;
+    Vector        origin;
     orientation_t ori;
-    int numTags;
-    int i;
+    int           numTags;
+    int           i;
 
     if (!sv_showtags->string || !sv_showtags->string[0]) {
         return;
@@ -944,7 +944,7 @@ void G_SoundCallback(int entNum, soundChannel_t channelNumber, const char *name)
 
     if (!entity) {
         ScriptError("ERROR:  wait on playsound only works on entities that still exist when the sound is done playing."
-                   );
+        );
     }
 
     entity->CancelEventsOfType(EV_SoundDone);
@@ -1279,7 +1279,9 @@ G_ArchiveLevel
 
 =================
 */
-qboolean G_ArchiveLevel(const char *filename, byte** savedCgameState, size_t *savedCgameStateSize, qboolean autosave, qboolean loading)
+qboolean G_ArchiveLevel(
+    const char *filename, byte **savedCgameState, size_t *savedCgameStateSize, qboolean autosave, qboolean loading
+)
 {
     try {
         int         i;
@@ -1328,7 +1330,7 @@ qboolean G_ArchiveLevel(const char *filename, byte** savedCgameState, size_t *sa
             *savedCgameStateSize = num;
 
             if (*savedCgameStateSize) {
-                *savedCgameState = (byte*)gi.Malloc(*savedCgameStateSize);
+                *savedCgameState = (byte *)gi.Malloc(*savedCgameStateSize);
             } else {
                 *savedCgameState = NULL;
             }
@@ -1506,7 +1508,7 @@ G_WriteLevel
 
 =================
 */
-void G_WriteLevel(const char *filename, qboolean autosave, byte** savedCgameState, size_t* savedCgameStateSize)
+void G_WriteLevel(const char *filename, qboolean autosave, byte **savedCgameState, size_t *savedCgameStateSize)
 {
     game.autosaved = autosave;
     G_ArchiveLevel(filename, savedCgameState, savedCgameStateSize, autosave, qfalse);
@@ -1528,7 +1530,7 @@ calling ReadLevel.
 No clients are connected yet.
 =================
 */
-qboolean G_ReadLevel(const char *filename, byte** savedCgameState, size_t* savedCgameStateSize)
+qboolean G_ReadLevel(const char *filename, byte **savedCgameState, size_t *savedCgameStateSize)
 {
     qboolean status;
 
@@ -1646,8 +1648,8 @@ G_ClientDoBlends
 */
 void G_ClientDoBlends(void)
 {
-    gentity_t* edict;
-    int i;
+    gentity_t *edict;
+    int        i;
 
     for (i = 0, edict = g_entities; i < game.maxclients; i++, edict++) {
         if (!edict->inuse || !edict->client || !edict->entity) {
@@ -1665,25 +1667,25 @@ FindIntermissionPoint
 */
 void FindIntermissionPoint(void)
 {
-    SimpleEntity* sent;
-    SimpleEntity* starget;
-    vec3_t dir;
+    SimpleEntity *sent;
+    SimpleEntity *starget;
+    vec3_t        dir;
 
-    sent = static_cast<SimpleEntity*>(G_FindClass(NULL, "info_player_intermission"));
+    sent = static_cast<SimpleEntity *>(G_FindClass(NULL, "info_player_intermission"));
     if (!sent) {
         level.m_intermission_origin = vec_zero;
-        level.m_intermission_angle = vec_zero;
+        level.m_intermission_angle  = vec_zero;
         return;
     }
 
     level.m_intermission_origin = sent->origin;
-    level.m_intermission_angle = sent->angles;
+    level.m_intermission_angle  = sent->angles;
 
     if (!sent->target.length()) {
         return;
     }
 
-    starget = static_cast<SimpleEntity*>(G_FindTarget(NULL, sent->Target()));
+    starget = static_cast<SimpleEntity *>(G_FindTarget(NULL, sent->Target()));
     if (!starget) {
         return;
     }
@@ -1879,7 +1881,7 @@ void G_ExitLevel(void)
             }
             free(s);
         }
-out:
+    out:
         // level.nextmap should be set now, but if it isn't use the same map
         if (level.nextmap.length() == 0) {
             // Stay on the same map since no nextmap was set
