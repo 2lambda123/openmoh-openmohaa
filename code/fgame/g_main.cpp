@@ -582,7 +582,7 @@ void G_RunFrame(int levelTime, int frameTime)
                 "\n%i total: %d (%.1f)\n-----------------------\n",
                 level.framenum,
                 end - start,
-                static_cast<float>(end - start) * g_fMsecPerClock
+                static_cast<double>(end - start) * g_fMsecPerClock
             );
         }
 
